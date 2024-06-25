@@ -10,33 +10,48 @@ const GalleryContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
 `;
 
 const SearchBar = styled.input`
-  margin: 10px;
-  padding: 5px;
-  width: 200px;
+  margin: 10px 0;
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 `;
 
 const Button = styled.button`
-  margin: 5px;
-  padding: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
   background-color: #007bff;
   color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 const ImageGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-  width: 80%;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
 `;
 
 const ImageGallery: React.FC = () => {
-  const { pets, loading } = useFetchPets();
+  const { pets, loading, error } = useFetchPets();
   const { selectedPets, setSelectedPets, searchQuery, setSearchQuery } = usePetContext();
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -64,23 +79,25 @@ const ImageGallery: React.FC = () => {
     .sort((a, b) => sortOrder === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <GalleryContainer>
+      <h1>Pet Gallery</h1>
       <SearchBar
         type="text"
         placeholder="Search by title or description"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <div>
+      <ButtonGroup>
         <Button onClick={handleSelectAll}>Select All</Button>
         <Button onClick={handleClearSelection}>Clear Selection</Button>
         <Button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
           Sort by Name {sortOrder === 'asc' ? 'Z-A' : 'A-Z'}
         </Button>
         <Button onClick={handleDownload}>Download Selected</Button>
-      </div>
+      </ButtonGroup>
       <ImageGrid>
         {filteredPets.map(pet => (
           <ImageItem key={pet.id} pet={pet} />

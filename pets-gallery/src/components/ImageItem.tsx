@@ -6,14 +6,22 @@ const ImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 20px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const Image = styled.img`
   max-width: 100%;
-  border-radius: 5px;
+  border-radius: 8px;
 `;
 
 const Checkbox = styled.input`
